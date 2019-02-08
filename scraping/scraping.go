@@ -25,8 +25,10 @@ func Get(query string) (result []byte, err error) {
 	// by default, Ferret Runtime does not know about any HTML drivers
 	// all HTML manipulations are done via functions from standard library
 	// that assume that at least one driver is available
-	ctx = drivers.WithDynamic(ctx, cdp.NewDriver())
-	ctx = drivers.WithStatic(ctx, http.NewDriver())
+
+	userAgent := "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:42.0) Gecko/20100101 Firefox/42.0"
+	ctx = drivers.WithDynamic(ctx, cdp.NewDriver(cdp.WithUserAgent(userAgent)))
+	ctx = drivers.WithStatic(ctx, http.NewDriver(http.WithUserAgent(userAgent)))
 
 	return program.Run(ctx)
 }
