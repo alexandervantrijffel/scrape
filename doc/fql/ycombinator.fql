@@ -1,0 +1,27 @@
+LET doc = DOCUMENT('https://news.ycombinator.com/news', false)
+// WAIT_ELEMENT(doc, '.rank', 5000)
+LET articles = (
+  FOR article IN ELEMENTS(doc, '.athing')
+  LET title = ELEMENT(article, '.title')
+  LET storyLink = ELEMENT(title, '.storylink')
+  LET subtext = ELEMENT(article, '.subtext')
+  RETURN {
+    title: INNER_TEXT(article, '.title'),
+    contentLink: storyLink.attributes.href,
+  }
+)
+
+LET subtexts = (
+  FOR subtext IN ELEMENTS(doc, '.subtext')
+    LET ycombinatorLink = LAST(subtext.children)
+    RETURN {
+      score: INNER_TEXT(subtext, '.score'),
+      ycombinatorLink: ycombinatorLink.attributes.href,
+      comments: ycombinatorLink.innerText
+    }
+)
+
+RETURN {
+  articles: articles,
+  subtexts: subtexts
+}
