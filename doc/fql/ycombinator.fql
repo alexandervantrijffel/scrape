@@ -1,12 +1,9 @@
 LET doc = DOCUMENT('https://news.ycombinator.com/news', false)
-// WAIT_ELEMENT(doc, '.rank', 5000)
 LET articles = (
   FOR article IN ELEMENTS(doc, '.athing')
-  LET title = ELEMENT(article, '.title')
-  LET storyLink = ELEMENT(title, '.storylink')
-  LET subtext = ELEMENT(article, '.subtext')
+  LET storyLink = ELEMENT(article, '.title .storylink')
   RETURN {
-    title: INNER_TEXT(article, '.title'),
+    title: storyLink.innerText,
     contentLink: storyLink.attributes.href,
   }
 )
