@@ -1,0 +1,11 @@
+LET doc = DOCUMENT('https://nu.nl')
+FOR article IN ELEMENTS(doc, 'div[data-type="articlelist"]')
+  LET title = ELEMENT(article, '.title')
+  LET excerpt = ELEMENT(article, '.excerpt')
+  LET url = ELEMENT(article, 'a.trackevent')
+  RETURN {
+    title: title.innerText,
+    excerpt: excerpt.innerText,
+    url: url.attributes.href
+  }
+

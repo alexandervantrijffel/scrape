@@ -1,0 +1,13 @@
+LET doc = DOCUMENT('https://www.ad.nl/nieuws/rss.xml')
+FOR article IN ELEMENTS(doc, 'item')
+  LET title = ELEMENT(article, 'title')
+  LET excerpt = ELEMENT(article, 'description')
+  LET pubDate = ELEMENT(article, 'pubDate')
+  LET url = ELEMENT(article, 'guid')
+  RETURN {
+    title: title.innerText,
+    excerpt: excerpt.innerText,
+    pubDate: pubDate.innerText,
+    url: url.innerText
+  }
+
