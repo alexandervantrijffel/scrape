@@ -1,6 +1,7 @@
 package sourceycombinator
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/alexandervantrijffel/goutil/logging"
@@ -22,4 +23,11 @@ func TestJsonToArticles(t *testing.T) {
 	assert.Equal(t, "1.FindChips – Get instant insight into any electronic component (findchips.com)", first.Title)
 	assert.Equal(t, 46, first.Comments)
 	assert.Equal(t, 236, first.Score)
+
+	top := TopArticles(articles)
+	logging.Infof("Top %+v", top)
+	assert.Equal(t, 236, articles[0].Score)
+	for _, a := range top {
+		assert.True(t, a.Score >= 150, fmt.Sprintf("Below 150! %+v", a))
+	}
 }

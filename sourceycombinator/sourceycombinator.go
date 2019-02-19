@@ -46,12 +46,22 @@ LET subtexts = (
 RETURN {
   articles: articles,
   subtexts: subtexts
-}
-`)
+}`)
 	if errorcheck.CheckLogf(err, "Failed to scrape") != nil {
 		return nil, err
 	}
 	return jsonToArticles(result)
+}
+
+func TopArticles(articles []Article) []Article {
+	minScore := 150
+	var top []Article
+	for _, a := range articles {
+		if a.Score > minScore {
+			top = append(top, a)
+		}
+	}
+	return top
 }
 
 type Article struct {
