@@ -50,18 +50,21 @@ RETURN {
 	if errorcheck.CheckLogf(err, "Failed to scrape") != nil {
 		return nil, err
 	}
-	return jsonToArticles(result)
+	return persistArticles(topArticles(jsonToArticles(result)))
 }
 
-func TopArticles(articles []Article) []Article {
+func topArticles(articles []Article, prevError error) ([]Article, error) {
+	if prevError != nil {
+		return articles, prevError
+	}
 	minScore := 150
 	var top []Article
 	for _, a := range articles {
-		if a.Score > minScore {
+		if a.Score >= minScore {
 			top = append(top, a)
 		}
 	}
-	return top
+	return top, nil
 }
 
 type Article struct {
@@ -80,19 +83,27 @@ func jsonToArticles(json []byte) ([]Article, error) {
 	var result []Article
 	for n, art := range articles.Articles {
 		subtext := articles.Subtexts[n]
-		comments := strings.TrimSpace(strings.Replace(subtext.Comments, "comments", "", -1))
+		comments := strings.TrimSpace(remove(remove(subtext.Comments, "comments"), "comment"))
 		if comments == "hide" {
 			// ads don't have an ycombinator link or comments
 			continue
 		}
-		score := strings.TrimSpace(strings.Replace(subtext.Score, "points", "", -1))
+		commentCount := 0
+		if comments != "discuss" {
+			commentCount = stringutil.AtoiWithLogging(comments)
+		}
+		score := strings.TrimSpace(remove(subtext.Score, "points"))
 		result = append(result, Article{
 			Title:           art.Title,
 			Score:           stringutil.AtoiWithLogging(score),
 			ContentLink:     art.ContentLink,
-			Comments:        stringutil.AtoiWithLogging(comments),
+			Comments:        commentCount,
 			YcombinatorLink: subtext.YcombinatorLink,
 		})
 	}
 	return result, nil
+}
+
+func remove(source string, toRemove string) string {
+	return strings.Replace(source, toRemove, "", -1)
 }
