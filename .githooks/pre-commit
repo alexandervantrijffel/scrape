@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh -x
 
 # How to use: 
 # Store this file as .git/hooks/pre-commit and make it executable
@@ -53,27 +53,6 @@ then
 	echo "what you are doing."
 	exit 1
 fi
-
-# goimports -d $(find . -type f -name '*.go' -not -path "**/*/vendor/*")
-
-# if [ $? -ne 0 ]
-# then
-# 	echo ""
-# 	echo "Failed to run go fmt. This shouldn't happen. Please"
-# 	echo "check its output or run commit with --no-verify if "
-# 	echo "you know what you are doing."
-# 	exit 1
-# fi
-
-# go vet ./... 
-# if [ $? -ne 0 ]
-# then
-#	echo ""
-#	echo "go vet has detected potential issues in your project."
-#	echo "Please check its output or run commit with --no-verify"
-#	echo "if you know what you are doing."
-#	exit 1
-# fi
 
 golangci-lint run -E goimports -E dupl
 if [ $? -ne 0 ]

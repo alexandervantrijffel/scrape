@@ -1,5 +1,6 @@
-#!/bin/zsh
-DIR=$(dirname $0:A)
+#!/bin/sh -x
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 pushd $DIR
 
 export $(cat .env | xargs)
