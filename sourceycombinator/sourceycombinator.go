@@ -2,6 +2,7 @@ package sourceycombinator
 
 import (
 	"strings"
+	"time"
 
 	"github.com/alexandervantrijffel/goutil/errorcheck"
 	"github.com/alexandervantrijffel/goutil/jsonutil"
@@ -73,6 +74,7 @@ type Article struct {
 	Score           int
 	Comments        int
 	YcombinatorLink string
+	FoundAt         time.Time
 }
 
 func jsonToArticles(json []byte) ([]Article, error) {
@@ -99,6 +101,7 @@ func jsonToArticles(json []byte) ([]Article, error) {
 			ContentLink:     art.ContentLink,
 			Comments:        commentCount,
 			YcombinatorLink: subtext.YcombinatorLink,
+			FoundAt:         time.Now().UTC(),
 		})
 	}
 	return result, nil
