@@ -24,7 +24,7 @@ type ArticleList struct {
 
 func RetrieveArticles() ([]Article, error) {
 	result, err := scraping.Get(`
-LET doc = DOCUMENT('https://news.ycombinator.com/news', false)
+LET doc = DOCUMENT('https://news.ycombinator.com/news?p=0', false)
 LET articles = (
   FOR article IN ELEMENTS(doc, '.athing')
 		LET storyLink = ELEMENT(article, '.title .storylink')
