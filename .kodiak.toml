@@ -1,0 +1,25 @@
+version = 1
+
+[merge]
+prioritize_ready_to_merge = true
+automerge_label = "ready-to-merge"
+
+# require that the automerge label be set for Kodiak to merge a PR. if you
+# disable this Kodiak will immediately attempt to merge every PR you create
+require_automerge_label = true
+
+method = "squash"
+delete_branch_on_merge = true
+blocking_labels=["wip","do-not-merge"]
+
+[merge.message]
+title = "pull_request_title"
+body = "pull_request_body"
+
+[update]
+always = true
+require_automerge_label = false
+ignored_usernames = ["renovate-bot-service"]
+
+[approve]
+auto_approve_usernames = ["renovate-bot-service"]
